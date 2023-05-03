@@ -302,9 +302,8 @@ $data = mysqli_fetch_all($res, MYSQLI_ASSOC);
                             id: delIds,
                         },
                         success: function(response) {
-                            if (response) {
-                                location.reload(true)
-                            }
+                            location.reload(true)
+                         
                         }
                     })
 
