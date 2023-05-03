@@ -13,6 +13,8 @@ require_once "functions/function.inc.php";
 
     <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="./assets/css/datatables.min.css">
+    <link rel="stylesheet" href="./assets/css/dataTables.checkboxes.css">
+
 </head>
 
 <body>

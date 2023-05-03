@@ -9,9 +9,11 @@ $data = mysqli_fetch_all($res, MYSQLI_ASSOC);
 <div class="container">
     <h1 class="text-center py-4"> Review Rating System</h1>
     <button type="button" id="create" class="btn btn-primary my-3">Create New Review</button>
+    <button type="button" id="delete-all" class="btn btn-danger my-3">Delete All Records</button>
     <table id="myTable" class="table table-bordered">
         <thead>
             <tr>
+                <th><input type="checkbox" id="check-all"></th>
                 <th>S. No.</th>
                 <th>Full Name</th>
                 <th>Email</th>
@@ -24,6 +26,7 @@ $data = mysqli_fetch_all($res, MYSQLI_ASSOC);
             <?php foreach ($data as $row) : ?>
                 <?php extract(json_decode($row['contact_info'], true)); ?>
                 <tr>
+                    <td><?= $row['id'] ?></td>
                     <td><?= $row['id'] ?></td>
                     <td><?= $row['name'] ?></td>
                     <td><?= $email ?></td>
@@ -105,11 +108,11 @@ $data = mysqli_fetch_all($res, MYSQLI_ASSOC);
                 e.preventDefault()
 
 
-                const name = $('input[name=name').val();
-                const email = $('input[name=email').val();
-                const mobile = $('input[name=mobile').val();
-                const rating = parseInt($('input[name=rating').val());
-                const description = $('textarea[name=description').val();
+                const name = $('input[name=name]').val();
+                const email = $('input[name=email]').val();
+                const mobile = $('input[name=mobile]').val();
+                const rating = parseInt($('input[name=rating]:checked').val());
+                const description = $('textarea[name=description]').val();
 
                 const type = 'add';
 
@@ -149,53 +152,56 @@ $data = mysqli_fetch_all($res, MYSQLI_ASSOC);
                         email,
                         mobile
                     } = jQuery.parseJSON(result.contact_info)
-                    console.log(result);
                     let html = `
-            <form id="review-form" action="" class="row g-0">
-                <div class="col-md-12 mt-3 px-3">
-                    <label for="" class="form-label d-block text-start">Full Name</label>
-                    <input type="text" class="form-control" name="name" placeholder="Enter Full Name" value="${result.name}">
-                </div>
-                <div class="col-md-12 mt-3 px-3">
-                    <label for="" class="form-label d-block text-start">Email</label>
-                    <input type="email" class="form-control" name="email" placeholder="Enter Email" value="${email}">
-                </div>
-                <div class="col-md-12 mt-3 px-3">
-                    <label for="" class="form-label d-block text-start">Mobile</label>
-                    <input type="number" class="form-control" name="mobile" placeholder="Enter Mobile" value="${mobile}">
-                </div>
-                <div class="col-md-12 mt-3 px-3">
-                    <label class="form-label d-block text-start">Rating</label>
-                    <div class=" form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="rating" id="rating1" value="1" ${result.rating == 1 ? 'checked': ''}>
-                        <label class="form-check-label" for="rating1">1</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="rating" id="rating2" value="2" ${result.rating == 2 ? 'checked': ''}>
-                        <label class="form-check-label" for="rating2">2</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="rating" id="rating3" value="3" ${result.rating == 3 ? 'checked': ''}>
-                        <label class="form-check-label" for="rating3">3</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="rating" id="rating4" value="4" ${result.rating == 4 ? 'checked': ''}>
-                        <label class="form-check-label" for="rating4">4</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="rating" id="rating5" value="5" ${result.rating == 5 ? 'checked': ''}>
-                        <label class="form-check-label" for="rating5">5</label>
-                    </div>
-                </div>
-                <div class="col-md-12 mt-3 px-3 ">
-                    <label class="form-label d-block text-start" for="description">Description</label>
-                    <textarea name="description" id="description" class="form-control" placeholder="Enter Description">${result.description}</textarea>
-                </div>
-                <div class="col-md-12 mt-4 text-center">
-                    <input type="submit" name="submit" value="Submit" class="btn btn-lg btn-success">
-                </div>
-            </form>
-            `;
+                            <form id="review-form" action="" class="row g-0">
+                                <div class="col-md-12 mt-3 px-3">
+                                    <label for="" class="form-label d-block text-start">Full Name</label>
+                                    <input type="text" class="form-control" name="name" placeholder="Enter Full Name" value="${result.name}">
+                                </div>
+                                <div class="col-md-12 mt-3 px-3">
+                                    <label for="" class="form-label d-block text-start">Email</label>
+                                    <input type="email" class="form-control" name="email" placeholder="Enter Email" value="${email}">
+                                </div>
+                                <div class="col-md-12 mt-3 px-3">
+                                    <label for="" class="form-label d-block text-start">Mobile</label>
+                                    <input type="number" class="form-control" name="mobile" placeholder="Enter Mobile" value="${mobile}">
+                                </div>
+                                <div class="col-md-12 mt-3 px-3">
+                                    <label class="form-label d-block text-start">Rating</label>
+                                    <div class=" form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="rating" id="rating1" value="1" ${result.rating == 1 ? 'checked' :''}>
+                                        <label class="form-check-label" for="rating1">1</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="rating" id="rating2" value="2"  ${result.rating == 2 ? 'checked' :''}>
+                                        <label class="form-check-label" for="rating2">2</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="rating" id="rating3" value="3"  ${result.rating ==3 ? 'checked' :''}>
+                                        <label class="form-check-label" for="rating3">3</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="rating" id="rating4" value="4"  ${result.rating == 4 ? 'checked' :''}>
+                                        <label class="form-check-label" for="rating4">4</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="rating" id="rating5" value="5"  ${result.rating == 5 ? 'checked' :''}>
+                                        <label class="form-check-label" for="rating5">5</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mt-3 px-3 ">
+                                    <label class="form-label d-block text-start" for="description">Description</label>
+                                    <textarea name="description" id="description" class="form-control" placeholder="Enter Description">${result.description}</textarea>
+                                </div>
+                                <div class="col-md-12 mt-4 text-center">
+                                    <input type="submit" name="submit" value="Submit" class="btn btn-lg btn-success">
+                                </div>
+                            </form>
+                        `;
+
+                    $('input[type=radio]').on('change', function() {
+                        $(this).attr('checked', true)
+                    })
 
                     Swal.fire({
                         title: '<h1>Update Review</h1>',
@@ -209,13 +215,13 @@ $data = mysqli_fetch_all($res, MYSQLI_ASSOC);
                         e.preventDefault()
 
 
-                        const name = $('input[name=name').val();
-                        const email = $('input[name=email').val();
-                        const mobile = $('input[name=mobile').val();
-                        const rating = parseInt($('input[name=rating').val());
-                        const description = $('textarea[name=description').val();
+                        const name = $('input[name=name]').val();
+                        const email = $('input[name=email]').val();
+                        const mobile = $('input[name=mobile]').val();
+                        const rating = parseInt($('input[name=rating]:checked').val());
+                        const description = $('textarea[name=description]').val();
 
-                        // alert('working')
+                        console.log(rating);
                         $.ajax({
                             url: 'handle-review.php',
                             method: 'POST',
@@ -235,11 +241,6 @@ $data = mysqli_fetch_all($res, MYSQLI_ASSOC);
                     })
                 }
             })
-
-
-
-
-
         })
 
         // Delete Review
@@ -277,5 +278,38 @@ $data = mysqli_fetch_all($res, MYSQLI_ASSOC);
 
         })
 
+        // Delete All functionality
+        $('#delete-all').on('click', function() {
+            let selectedRows = table.column(0).checkboxes.selected();
+            let delIds = [];
+            $.each(selectedRows, function(key, value) {
+                delIds.push(value)
+            })
+            Swal.fire({
+                title: 'Do you want to Delete The Record?',
+                showDenyButton: false,
+                showCancelButton: true,
+                confirmButtonText: 'Delete',
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    const type = 'deleteall';
+                    $.ajax({
+                        url: 'handle-review.php',
+                        method: 'POST',
+                        data: {
+                            type,
+                            id: delIds,
+                        },
+                        success: function(response) {
+                            if (response) {
+                                location.reload(true)
+                            }
+                        }
+                    })
+
+                }
+            })
+        })
     })
 </script>
